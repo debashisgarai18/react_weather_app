@@ -1,8 +1,15 @@
+import {useState} from 'react'
 import Leftmenu from "./components/Leftmenu";
 import RightSection from "./components/RightSection";
 import "./App.css";
 
 function App() {
+  const [getData, setGetData] = useState();
+  const receiveData = (data) => {
+    setGetData(data);
+  }
+
+  console.log(getData);
   return (
     <div
       className=" w-full h-screen pt-[7rem] bg-cover bg-center relative"
@@ -16,7 +23,7 @@ function App() {
         style={{
           backgroundImage:`url('https://images.pexels.com/photos/913807/pexels-photo-913807.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')`
         }}>
-          <Leftmenu/>
+          <Leftmenu sendData = {receiveData}/>
           <RightSection/>
         </div>
       </div>

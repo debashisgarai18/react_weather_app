@@ -1,10 +1,9 @@
 import { useState } from "react";
+import PropTypes from 'prop-types';
 
-const Leftmenu = () => {
+const Leftmenu = ({sendData}) => {
   const [locName, setlocName] = useState("");
-  const [globalLocArray, setglobaLocArray] = useState([]);
-  const [locLatitude, setlocLatitude] = useState();
-  const [locLongitude, setlocLongitude] = useState();
+  const [globalLocArray, setglobaLocArray] = useState([{}]);
 
   const apiKey = import.meta.env.VITE_API_KEY; 
 
@@ -25,10 +24,17 @@ const Leftmenu = () => {
         alert("Enter correct location name");
         return ;
     }
-    setlocLatitude(resData[0].lat);
-    setlocLongitude(resData[0].lon);
-    setglobaLocArray([...globalLocArray, locName]);
+
+    // object carrying the location details
+    const toBePushed = {
+      locationName : locName,
+      latitude : resData[0].lat,
+      longitude : resData[0].lon
+    }
+
+    setglobaLocArray([...globalLocArray, toBePushed]);
     setlocName("");
+    sendData(globalLocArray);
   };
 
   return (
@@ -71,4 +77,7 @@ const Leftmenu = () => {
   );
 };
 
+Leftmenu.propTypes = {
+  sendData : PropTypes.any,
+};
 export default Leftmenu;
