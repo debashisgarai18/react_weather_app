@@ -3,7 +3,30 @@ import { useState } from "react";
 const Leftmenu = () => {
   const [locName, setlocName] = useState("");
   const [globalLocArray, setglobaLocArray] = useState([]);
-  const handleAddCityClick = () => {
+  const [locLatitude, setlocLatitude] = useState();
+  const [locLongitude, setlocLongitude] = useState();
+
+  const apiKey = import.meta.env.VITE_API_KEY; 
+
+  const handleAddCityClick = async () => {
+
+    // checks
+    if(locName === '') {
+        alert('Location Name cannot be Empty!!');
+        return;
+    }
+    if(globalLocArray.includes(locName)){
+        alert("This location is already present!!");
+        return;
+    }
+    const res = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${locName}&limit=1&appid=${apiKey}`);
+    const resData = await res.json();
+    if(resData.length === 0) {
+        alert("Enter correct location name");
+        return ;
+    }
+    setlocLatitude(resData[0].lat);
+    setlocLongitude(resData[0].lon);
     setglobaLocArray([...globalLocArray, locName]);
     setlocName("");
   };
@@ -14,7 +37,7 @@ const Leftmenu = () => {
         <input
           type="text"
           className="w-full h-[4rem] rounded-md text-3xl px-2 focus:outline-none focus:border-none"
-          onChange={(e) => setlocName(e.target.value)}
+          onChange={(e) => setlocName((e.target.value).toLowerCase())}
           value={locName}
         />
         <button
