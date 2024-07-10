@@ -14,14 +14,14 @@ function App() {
     <div
       className=" w-full h-screen pt-[7rem] bg-cover bg-center relative"
       style={{
-        backgroundImage: `url('https://images.pexels.com/photos/459451/pexels-photo-459451.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')`,
+        backgroundImage: `url('https://img.freepik.com/free-photo/storm-clouds_1122-2747.jpg?t=st=1720645629~exp=1720649229~hmac=8529b63099306477fc1c2efb5771f86a69456f7cc4204bcd4486e6a4adb9c8e4&w=1380')`,
       }}
     >
-      <div className="w-full h-full bg-black absolute top-0 opacity-65"></div>
-      <div className="main-render max-w-[70%] h-[90%] m-auto bg-white/10 backdrop-blur-lg rounded-2xl p-[1rem]">
+      <div className="w-full h-full bg-black absolute top-0 opacity-45"></div>
+      <div className="main-render max-w-[70%] h-[90%] m-auto bg-transparent rounded-2xl p-[1rem]">
         <div className="w-full h-full bg-cover bg-center rounded-2xl flex flex-wrap px-[2rem] py-[2.5rem] gap-[2.5rem]"
         style={{
-          backgroundImage:`url('https://images.pexels.com/photos/913807/pexels-photo-913807.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')`
+          backgroundImage:`url()`
         }}>
           <Leftmenu locData = {receiveData}/>
           <RightSection showLocdata = {getData}/>

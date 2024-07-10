@@ -56,7 +56,7 @@ const Leftmenu = ({locData}) => {
   }
 
   return (
-    <div className="w-[25%] h-full bg-transparent backdrop-blur-lg shadow-lg shadow-neutral-900 rounded-lg px-[0.75rem] py-[2rem] flex flex-col gap-[2rem]">
+    <div className="w-[25%] h-full bg-transparent backdrop-blur-lg shadow-md shadow-neutral-900 rounded-lg px-[0.75rem] py-[2rem] flex flex-col gap-[2rem]">
       <div className="input w-full h-fit flex flex-col flex-wrap gap-[1rem]">
         <input
           type="text"
@@ -65,7 +65,7 @@ const Leftmenu = ({locData}) => {
           value={locName}
         />
         <button
-          className="w-full h-[3rem] bg-cyan-400 text-2xl rounded-md font-semibold uppercase hover:bg-cyan-500 focus:border-2 focus:border-white"
+          className="w-full h-[3rem] bg-[#303238] text-2xl text-white rounded-md font-semibold tracking-wide capitalise hover:bg-[#1e2023] focus:border-2 focus:border-white shadow-md"
           onClick={handleAddCityClick}
         >
           Add City
