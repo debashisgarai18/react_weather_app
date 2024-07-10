@@ -23,8 +23,8 @@ function App() {
         style={{
           backgroundImage:`url('https://images.pexels.com/photos/913807/pexels-photo-913807.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')`
         }}>
-          <Leftmenu sendData = {receiveData}/>
-          <RightSection/>
+          <Leftmenu locData = {receiveData}/>
+          <RightSection showLocdata = {getData}/>
         </div>
       </div>
     </div>

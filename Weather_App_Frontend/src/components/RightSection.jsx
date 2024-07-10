@@ -1,9 +1,23 @@
-import React from 'react'
+import React from "react";
+import PropTypes from "prop-types";
 
-const RightSection = () => {
+const RightSection = ({ showLocdata }) => {
   return (
-    <div className='w-[70%] h-full bg-green-300'>RightSection</div>
-  )
-}
+    <>
+      {showLocdata ? (
+        <div className="w-[70%] h-full bg-green-300">
+          <div>{showLocdata.name}</div>
+          <div>{showLocdata.lat}</div>
+          <div>{showLocdata.long}</div>
+        </div>
+      ) : (
+        <div className="w-[70%] h-full bg-green-300">No data to be shown</div>
+      )}
+    </>
+  );
+};
 
-export default RightSection
+RightSection.propTypes = {
+  showLocdata: PropTypes.object.isRequired,
+};
+export default RightSection;

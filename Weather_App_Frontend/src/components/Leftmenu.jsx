@@ -1,41 +1,59 @@
 import { useState } from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
-const Leftmenu = ({sendData}) => {
+const Leftmenu = ({locData}) => {
   const [locName, setlocName] = useState("");
-  const [globalLocArray, setglobaLocArray] = useState([{}]);
+  const [globalLocArray, setglobaLocArray] = useState([]);
 
-  const apiKey = import.meta.env.VITE_API_KEY; 
+  const apiKey = import.meta.env.VITE_API_KEY;
 
   const handleAddCityClick = async () => {
-
     // checks
-    if(locName === '') {
-        alert('Location Name cannot be Empty!!');
-        return;
+    if (locName === "") {
+      alert("Location Name cannot be Empty!!");
+      setlocName("");
+      return;
     }
-    if(globalLocArray.includes(locName)){
-        alert("This location is already present!!");
-        return;
-    }
-    const res = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${locName}&limit=1&appid=${apiKey}`);
+
+    const res = await fetch(
+      `https://api.openweathermap.org/geo/1.0/direct?q=${locName}&limit=1&appid=${apiKey}`
+    );
     const resData = await res.json();
-    if(resData.length === 0) {
-        alert("Enter correct location name");
-        return ;
+    if (resData.length === 0) {
+      alert("Enter correct location name");
+      return;
+    }
+
+    if (globalLocArray) {
+      const findName = globalLocArray.map((elem) => elem.locationName);
+      if (findName.includes(resData[0].name)) {
+        alert("This location is already present!!");
+        setlocName("");
+        return;
+      }
     }
 
     // object carrying the location details
     const toBePushed = {
-      locationName : locName,
-      latitude : resData[0].lat,
-      longitude : resData[0].lon
-    }
+      locationName: resData[0].name,
+      latitude: resData[0].lat,
+      longitude: resData[0].lon,
+    };
 
     setglobaLocArray([...globalLocArray, toBePushed]);
     setlocName("");
-    sendData(globalLocArray);
   };
+
+  // function to show the data on clicking "show data"
+  // passing the specific data to the main app.js
+  const showData = (locName, latitude, longitude) => {
+    const passData = {
+      name : locName,
+      lat : latitude,
+      long : longitude
+    };
+    locData(passData);
+  }
 
   return (
     <div className="w-[25%] h-full bg-transparent backdrop-blur-lg shadow-lg shadow-neutral-900 rounded-lg px-[0.75rem] py-[2rem] flex flex-col gap-[2rem]">
@@ -43,7 +61,7 @@ const Leftmenu = ({sendData}) => {
         <input
           type="text"
           className="w-full h-[4rem] rounded-md text-3xl px-2 focus:outline-none focus:border-none"
-          onChange={(e) => setlocName((e.target.value).toLowerCase())}
+          onChange={(e) => setlocName(e.target.value.toLowerCase())}
           value={locName}
         />
         <button
@@ -58,19 +76,21 @@ const Leftmenu = ({sendData}) => {
           Added Cities
         </div>
         <div className="w-full h-[88%] rounded-md overflow-y-auto hide-scrollbar flex gap-[0.75rem] flex-col py-[0.5rem]">
-          {globalLocArray.map((e, idx) => {
-            return (
-              <div
-                key={idx}
-                className="w-full py-[0.5rem] text-2xl bg-red-700 text-white rounded-md px-[0.3rem] cursor-pointer flex flex-row justify-between"
-              >
-                <div className="h-full w-[60%]">{e}</div>
-                <button className="h-full w-[35%] bg-blue-300 text-lg rounded-md cursor-pointer">
-                  Show Data
-                </button>
-              </div>
-            );
-          })}
+          {globalLocArray &&
+            globalLocArray.map((e, idx) => {
+              return (
+                <div
+                  key={idx}
+                  className="w-full py-[0.5rem] text-2xl text-white rounded-md px-[0.3rem] cursor-pointer flex flex-row justify-between"
+                >
+                  <div className="h-full w-[60%]">{e.locationName}</div>
+                  <button className="h-full w-[35%] bg-blue-300 text-lg rounded-md cursor-pointer"
+                  onClick={() => showData(e.locationName, e.latitude, e.longitude)}>
+                    Show Data
+                  </button>
+                </div>
+              );
+            })}
         </div>
       </div>
     </div>
@@ -78,6 +98,6 @@ const Leftmenu = ({sendData}) => {
 };
 
 Leftmenu.propTypes = {
-  sendData : PropTypes.any,
+  locData : PropTypes.func.isRequired,
 };
 export default Leftmenu;
