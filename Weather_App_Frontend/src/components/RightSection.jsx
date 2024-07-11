@@ -4,20 +4,52 @@ import { FiSun } from "react-icons/fi";
 import { BsCloudRain } from "react-icons/bs";
 import { BsCloudSun } from "react-icons/bs";
 import { MdDeleteOutline } from "react-icons/md";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const RightSection = ({ showLocdata }) => {
   const apiKey = import.meta.env.VITE_API_KEY;
-  // const getDatafromAPI = async () => {
-  //   const res = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${showLocdata.lat}&lon=${showLocdata.long}&appid=${apiKey}`);
-  //   const data = await res.json();
+  // const [day1, setDay1] = useState("");
+  // const [day2, setDay2] = useState("");
+  // const [day3, setDay3] = useState("");
+  // const [day4, setDay4] = useState("");
+  // const [day5, setDay5] = useState("");
+  // const [date, setDate] = useState("");
+  // const [temp1, setTemp1] = useState("");
+  // const [temp2, setTemp2] = useState("");
+  // const [temp3, setTemp3] = useState("");
+  // const [temp4, setTemp4] = useState("");
+  // const [temp5, setTemp5] = useState("");
 
-  //   console.log(data);
-  // }
+  const convertUTC2ISt = (utcString) => {
+    if(!utcString) return;
+
+    const date = new Date(utcString);
+    if(isNaN(date.getTime())){
+      alert("Invalid date and Invalid Day");
+    }
+
+    const dwd = {
+      date : date.toLocaleDateString(),
+      day : date.toLocaleDateString('en-US', {weekday : 'long'})
+    }
+
+    return dwd;
+  }
+
+  const getDatafromAPI = async () => {
+    const res = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${showLocdata.lat}&lon=${showLocdata.long}&appid=${apiKey}&units=metric`);
+    const data = await res.json();
+    const name = showLocdata.name;
+    const country = data.city.country;
+    const date = convertUTC2ISt(data.list[1].dt).date;
+    const day = convertUTC2ISt(data.list[1].dt).day;
+    // const temp1 = data.list[0]
+    console.log(name, country, date, day);
+  }
 
   useEffect(() => {
-    console.log(showLocdata.lat);
-    // getDatafromAPI();
+    if(showLocdata)
+    getDatafromAPI();
   }, [showLocdata]);
 
   return (
