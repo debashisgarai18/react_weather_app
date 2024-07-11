@@ -9,7 +9,6 @@ function App() {
     setGetData(data);
   }
 
-  console.log(getData);
   return (
     <div
       className=" w-full h-screen pt-[7rem] bg-cover bg-center relative bg-[#353535]"

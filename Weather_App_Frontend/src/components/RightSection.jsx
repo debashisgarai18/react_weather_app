@@ -4,9 +4,22 @@ import { FiSun } from "react-icons/fi";
 import { BsCloudRain } from "react-icons/bs";
 import { BsCloudSun } from "react-icons/bs";
 import { MdDeleteOutline } from "react-icons/md";
+import { useEffect } from "react";
 
 const RightSection = ({ showLocdata }) => {
-  console.log(showLocdata)
+  const apiKey = import.meta.env.VITE_API_KEY;
+  // const getDatafromAPI = async () => {
+  //   const res = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${showLocdata.lat}&lon=${showLocdata.long}&appid=${apiKey}`);
+  //   const data = await res.json();
+
+  //   console.log(data);
+  // }
+
+  useEffect(() => {
+    console.log(showLocdata.lat);
+    // getDatafromAPI();
+  }, [showLocdata]);
+
   return (
     <>
       <div className="w-[70%] h-full bg-transparent backdrop-blur-lg shadow-md shadow-neutral-900 rounded-lg px-[0.75rem] py-[2rem] flex justify-center items-center">
@@ -91,7 +104,9 @@ const RightSection = ({ showLocdata }) => {
               <div className="low w-full h-[20%] flex items-center">
                 <div className="w-[95%] h-[55%]">
                   <button className="h-full w-full flex items-center justify-center gap-[0.5rem] bg-gradient-to-r from-[#545555] via-[#303238] to-[#232327] text-2xl text-white rounded-md tracking-wide capitalise  focus:border-[1px] focus:border-white shadow-md border-[1px] border-white">
-                    <div><MdDeleteOutline /></div>
+                    <div>
+                      <MdDeleteOutline />
+                    </div>
                     <div>Delete City</div>
                   </button>
                 </div>
