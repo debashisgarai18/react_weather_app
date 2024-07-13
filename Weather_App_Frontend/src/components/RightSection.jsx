@@ -4,7 +4,7 @@ import { FiSun } from "react-icons/fi";
 import { BsCloudRain } from "react-icons/bs";
 import { BsCloudSun } from "react-icons/bs";
 import { MdDeleteOutline } from "react-icons/md";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const RightSection = ({ showLocdata }) => {
   const apiKey = import.meta.env.VITE_API_KEY;
