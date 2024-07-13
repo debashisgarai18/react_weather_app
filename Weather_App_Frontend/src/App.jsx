@@ -9,7 +9,8 @@ function App() {
     setGetData(data);
   }
 
-
+  // TODO : Accept the data here from the left section and call the API here only instead o RightSection (update)
+  // TODO (contd.) : doing this coz while clicking in one of the other 5 days it should yield the specifc data for that day.
 
   return (
     <div
