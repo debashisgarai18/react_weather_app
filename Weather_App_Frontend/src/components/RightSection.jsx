@@ -5,7 +5,10 @@ import { BsCloudRain } from "react-icons/bs";
 import { BsCloudSun } from "react-icons/bs";
 import { MdDeleteOutline } from "react-icons/md";
 import { useEffect, useState } from "react";
+import OtherDays from "./OtherDays";
+import { GoCloudOffline } from "react-icons/go";
 
+// map to store the diff icons for diff weather type
 const weatherIconMap = {
   "Rain" : (<BsCloudRain />),
   "Clouds" : (<BsCloudSun />),
@@ -25,6 +28,9 @@ const RightSection = ({ showLocdata }) => {
   const [windSpeed, setWindSpeed] = useState(0);
   const [weatherStatus, setWeatherStatus] = useState("");
   const [weatherIcon, setWeatherIcon] = useState();
+
+  // state to store all the data of the other 4 days
+  const [data4days, setData4days] = useState([]);
 
   const convertUTC2ISt = (utcString) => {
     if (!utcString) return;
@@ -47,12 +53,15 @@ const RightSection = ({ showLocdata }) => {
   };
 
   const getDatafromAPI = async () => {
+    if(!showLocdata.lat && !showLocdata.long){
+      return;
+    }
     const res = await fetch(
       `https://api.openweathermap.org/data/2.5/forecast?lat=${showLocdata.lat}&lon=${showLocdata.long}&appid=${apiKey}&units=metric`
     );
     const data = await res.json();
   
-    console.log(data);
+    // console.log(data);
 
     setMainTemp(data.list[0].main.temp);
     setHumidity(data.list[0].main.humidity);
@@ -61,9 +70,29 @@ const RightSection = ({ showLocdata }) => {
     setCountry(data.city.country);
     setMainDay(convertUTC2ISt(data.list[0].dt).day);
     setMainDate(convertUTC2ISt(data.list[0].dt).date);
-    setWindSpeed(data.list[0].wind.deg);
+    setWindSpeed(String(parseInt(data.list[0].wind.speed) * 18 / 5));
     setWeatherStatus(data.list[0].weather[0].main);
     setWeatherIcon(weatherIconMap[data.list[0].weather[0].main]);
+    
+    // to set data for the remaining 4 days
+    const dataArr = data.list.slice(8, 40).map((e, index) => (index % 8 === 0 ? e : null)).filter(e => e !== null);
+    const tempDataArray = [];
+    dataArr.map((e) => {
+      const dataToBePushed = {
+        "date" :  convertUTC2ISt(e.dt).date,
+        "day" : convertUTC2ISt(e.dt).day,
+        "mainTemp" : e.main.temp,
+        "humidity" : e.main.humidity,
+        "rain" : e.rain === undefined ? "0" : e.rain["3h"],
+        "windSpeed" : e.wind.speed,
+        "weatherStatus" : e.weather[0].main,
+        "weatherIcon" : weatherIconMap[e.weather[0].main]
+      }
+
+      tempDataArray.push(dataToBePushed);
+    })
+
+    setData4days(tempDataArray);
   };
 
   // render it once when the app loads
@@ -74,7 +103,7 @@ const RightSection = ({ showLocdata }) => {
   return (
     <>
       <div className="w-[70%] h-full bg-transparent backdrop-blur-lg shadow-md shadow-neutral-900 rounded-lg px-[0.75rem] py-[2rem] flex justify-center items-center">
-        {showLocdata ? (
+        {showLocdata.lat && showLocdata.long ? (
           <div className="w-[90%] h-[95%] flex flex-row justify-center items-center relative">
             <div
               className="overlay-left w-[50%] h-full absolute left-0 rounded-[2rem] opacity-20 bg-cover bg-center"
@@ -119,38 +148,11 @@ const RightSection = ({ showLocdata }) => {
                 </div>
                 <div className="flex flex-row justify-between text-2xl text-white tracking-wide">
                   <div className="uppercase font-semibold">wind</div>
-                  <div className="lowecase">{windSpeed} m/sec</div>
+                  <div className="lowecase">{windSpeed} km/hr</div>
                 </div>
               </div>
               <div className="mid w-full h-[30%] flex flex-row gap-[0.1rem]">
-                <button className="h-full w-[25%] focus:scale-105 hover:scale-105 bg-[#272E37] focus:bg-white focus:text-black hover:bg-white hover:text-black text-white flex items-center justify-center flex-col py-[1rem] gap-[0.5rem] rounded-[0.5rem]">
-                  <div className="w-full text-4xl flex justify-center">
-                    <FiSun />
-                  </div>
-                  <div className="w-full">Tue</div>
-                  <div className="w-full text-xl font-semibold">30 &deg;C</div>
-                </button>
-                <button className="h-full w-[25%] focus:scale-105 hover:scale-105 bg-[#272E37] focus:bg-white focus:text-black hover:bg-white hover:text-black text-white flex items-center justify-center flex-col py-[1rem] gap-[0.5rem] rounded-[0.5rem]">
-                  <div className="w-full text-4xl flex justify-center">
-                    <BsCloudRain />
-                  </div>
-                  <div className="w-full">Wed</div>
-                  <div className="w-full text-xl font-semibold">25 &deg;C</div>
-                </button>
-                <button className="h-full w-[25%] focus:scale-105 hover:scale-105 bg-[#272E37] focus:bg-white focus:text-black hover:bg-white hover:text-black text-white flex items-center justify-center flex-col py-[1rem] gap-[0.5rem] rounded-[0.5rem]">
-                  <div className="w-full text-4xl flex justify-center">
-                    <BsCloudSun />
-                  </div>
-                  <div className="w-full">Thurs</div>
-                  <div className="w-full text-xl font-semibold">29 &deg;C</div>
-                </button>
-                <button className="h-full w-[25%] focus:scale-105 hover:scale-105 bg-[#272E37] focus:bg-white focus:text-black hover:bg-white hover:text-black text-white flex items-center justify-center flex-col py-[1rem] gap-[0.5rem] rounded-[0.5rem]">
-                  <div className="w-full text-4xl flex justify-center">
-                    <FiSun />
-                  </div>
-                  <div className="w-full">Fri</div>
-                  <div className="w-full text-xl font-semibold">32 &deg;C</div>
-                </button>
+                <OtherDays data4days = {data4days} />
               </div>
               <div className="low w-full h-[20%] flex items-center">
                 <div className="w-[95%] h-[55%]">
@@ -165,8 +167,11 @@ const RightSection = ({ showLocdata }) => {
             </div>
           </div>
         ) : (
-          <div className="w-full h-full font-bold text-5xl text-center text-white">
-            No data to be shown
+          <div className="w-full h-full font-semibold text-3xl text-white relative">
+            <div className="w-[50%] h-[50%] absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 flex flex-row items-center gap-[0.75rem] justify-center">
+              <GoCloudOffline />
+              <div>No data to be shown</div>
+            </div>
           </div>
         )}
       </div>

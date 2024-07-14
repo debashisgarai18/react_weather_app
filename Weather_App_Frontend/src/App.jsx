@@ -2,9 +2,10 @@ import {useState} from 'react'
 import Leftmenu from "./components/Leftmenu";
 import RightSection from "./components/RightSection";
 import "./App.css";
+import { FaTowerBroadcast } from "react-icons/fa6";
 
 function App() {
-  const [getData, setGetData] = useState();
+  const [getData, setGetData] = useState({});
   const receiveData = (data) => {
     setGetData(data);
   }
@@ -15,10 +16,11 @@ function App() {
   return (
     <div
       className=" w-full h-screen pt-[7rem] bg-cover bg-center relative bg-[#353535]"
-      // style={{
-      //   backgroundImage: `url('https://t4.ftcdn.net/jpg/02/97/35/91/240_F_297359177_7QYu5IDqVWS7coXE41t6vMxcFCe295Z7.jpg')`,
-      // }}
     >
+      <div className='max-w-[60%] m-auto text-white text-5xl font-semibold tracking-wider flex items-center flex-row gap-[1.23rem]'>
+        <FaTowerBroadcast />
+        <div>Weather Forecast</div>
+      </div>
       <div className="w-full h-full bg-black absolute top-0 opacity-45"></div>
       <div className="main-render max-w-[70%] h-[90%] m-auto bg-transparent rounded-2xl p-[1rem]">
         <div className="w-full h-full bg-cover bg-center rounded-2xl flex flex-wrap px-[2rem] py-[2.5rem] gap-[2.5rem]">
